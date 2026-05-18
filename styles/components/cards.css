@@ -1,0 +1,72 @@
+/* =========================================
+   10. CARDS
+   ========================================= */
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: var(--padding);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border);
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--transition),
+              border-color var(--transition),
+              background-color var(--transition);
+}
+
+.card:last-child {
+  margin-bottom: 0;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.card:active {
+  transform: scale(0.99);
+}
+
+.stat-card {
+  text-align: center;
+  margin-bottom: 0;
+  background: linear-gradient(145deg, var(--card), color-mix(in srgb, var(--card) 60%, transparent));
+}
+
+.stat-value {
+  display: block;
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: var(--space-1);
+}
+
+.stat-label {
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.education-item {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.education-item:first-of-type {
+  margin-top: var(--space-3);
+  padding-top: 0;
+  border-top: none;
+}
+
+.education-item h4 {
+  margin-bottom: var(--space-1);
+}

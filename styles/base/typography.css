@@ -1,0 +1,55 @@
+/* =========================================
+   03. TYPOGRAPHY
+   ========================================= */
+
+h1, h2, h3, h4 {
+  color: var(--text);
+  letter-spacing: var(--tracking-tight);
+}
+
+h1 {
+  font-size: var(--font-hero);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-3);
+}
+
+h2 { font-size: var(--font-2xl); line-height: var(--leading-tight); }
+h3 { font-size: var(--font-lg); margin-bottom: var(--space-2); line-height: var(--leading-tight); }
+h4 { font-size: var(--font-base); line-height: var(--leading-tight); }
+
+p {
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-width);
+}
+
+.prose {
+  max-width: var(--prose-width);
+}
+
+.prose p + p {
+  margin-top: var(--space-3);
+}
+
+.accent {
+  color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), #7dd3fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.screen-header h2 {
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-2);
+}
+
+.screen-header p {
+  font-size: var(--font-sm);
+  max-width: var(--prose-width);
+}

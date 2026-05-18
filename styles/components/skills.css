@@ -1,0 +1,124 @@
+/* =========================================
+   14. SKILLS
+   React-ready: <SkillCard /> <SkillGroup />
+   ========================================= */
+
+.skills-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  container-type: inline-size;
+  container-name: skills;
+}
+
+.skill-group h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--font-base);
+}
+
+.skill-group-icon {
+  color: var(--accent);
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.skill-item {
+  margin-bottom: var(--space-4);
+}
+
+.skill-item:last-child {
+  margin-bottom: 0;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: var(--font-sm);
+}
+
+.skill-info span:first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.skill-item-icon {
+  color: var(--accent);
+  width: 18px;
+  text-align: center;
+}
+
+.skill-info span:last-child {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: var(--font-xs);
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--input-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), #7dd3fc);
+  border-radius: var(--radius-full);
+  transition: width 1.2s var(--ease-out);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.skill-block {
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.skill-block:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.skill-block-title {
+  font-size: var(--font-base);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  color: var(--text);
+}
+
+.skill-detail-desc {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-3);
+  max-width: var(--prose-width);
+}
+
+.skill-group .tech-tags {
+  margin-top: var(--space-2);
+}
+
+@container skills (min-width: 520px) {
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+  }
+}

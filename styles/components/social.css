@@ -1,0 +1,80 @@
+/* =========================================
+   15. SOCIAL
+   ========================================= */
+
+.hero-social-block {
+  margin-top: var(--space-6);
+  text-align: center;
+}
+
+.hero-social-label {
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.hero-social {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.hero-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  text-decoration: none;
+  transition: color var(--transition), border-color var(--transition),
+              background var(--transition), transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--transition);
+}
+
+.hero-social a i {
+  transition: transform var(--transition);
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.social-links a {
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), transform var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .hero-social a:hover {
+    color: var(--accent);
+    border-color: rgba(var(--accent-rgb), 0.4);
+    background: var(--accent-soft);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--accent-glow);
+  }
+
+  .hero-social a:hover i {
+    transform: scale(1.1);
+  }
+
+  .social-links a:hover {
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+}

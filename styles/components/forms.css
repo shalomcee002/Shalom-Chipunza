@@ -1,0 +1,168 @@
+/* =========================================
+   11. FORMS (FloatingInput pattern)
+   ========================================= */
+
+.contact-container {
+  max-width: 100%;
+}
+
+.floating-group {
+  position: relative;
+  margin-bottom: var(--space-6);
+}
+
+.floating-group input,
+.floating-group textarea,
+.floating-group select {
+  width: 100%;
+  padding: 14px 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--font-base);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.floating-group select {
+  appearance: none;
+  cursor: pointer;
+}
+
+.floating-group label {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: transform 0.2s var(--ease-out), color var(--transition);
+  transform-origin: left top;
+}
+
+/* JS-driven states (no :has()) */
+.floating-group.focused label,
+.floating-group.filled label,
+.floating-group input:focus ~ label,
+.floating-group textarea:focus ~ label,
+.floating-group select:focus ~ label {
+  transform: translateY(-28px) scale(0.85);
+  color: var(--accent);
+}
+
+.floating-group.focused input,
+.floating-group.focused textarea,
+.floating-group.focused select,
+.floating-group input:focus,
+.floating-group textarea:focus,
+.floating-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.floating-group.success input,
+.floating-group.success textarea,
+.floating-group.success select {
+  border-color: var(--success);
+}
+
+.floating-group.success label {
+  color: var(--success);
+}
+
+.floating-group.error input,
+.floating-group.error textarea,
+.floating-group.error select {
+  border-color: var(--error);
+}
+
+.floating-group.error label {
+  color: var(--error);
+}
+
+.error-message,
+.success-message {
+  display: none;
+  font-size: var(--font-xs);
+  margin-top: var(--space-2);
+}
+
+.error-message { color: var(--error); }
+.success-message { color: var(--success); }
+
+.floating-group.error .error-message { display: block; }
+.floating-group.success .success-message { display: block; }
+
+.floating-group.has-icon input,
+.floating-group.has-icon textarea,
+.floating-group.has-icon select {
+  padding-left: 44px;
+}
+
+.floating-group.has-icon label {
+  left: 44px;
+}
+
+.floating-group.has-icon--textarea label {
+  top: 14px;
+}
+
+.field-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  pointer-events: none;
+  z-index: 1;
+  transition: color var(--transition);
+}
+
+.floating-group.has-icon--textarea .field-icon {
+  top: 18px;
+  transform: none;
+}
+
+.floating-group.focused .field-icon,
+.floating-group.filled .field-icon {
+  color: var(--accent);
+}
+
+.floating-group.success .field-icon { color: var(--success); }
+.floating-group.error .field-icon { color: var(--error); }
+
+.char-counter {
+  display: block;
+  text-align: right;
+  font-size: var(--font-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+.char-counter.is-valid { color: var(--success); }
+.char-counter.is-invalid { color: var(--error); }
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+[data-theme="light"] .spinner {
+  border-color: rgba(15, 23, 42, 0.15);
+  border-top-color: var(--accent);
+}

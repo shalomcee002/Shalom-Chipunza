@@ -1,0 +1,199 @@
+/* =========================================
+   07. APP SHELL
+   ========================================= */
+
+.cursor-glow {
+  position: fixed;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: var(--z-cursor);
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity var(--duration-slow) var(--ease-out);
+  mix-blend-mode: screen;
+}
+
+.cursor-glow.is-active {
+  opacity: 0.35;
+}
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-elevated);
+  z-index: var(--z-splash);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: opacity var(--duration-slow) var(--ease-out),
+              visibility var(--duration-slow),
+              transform var(--duration-slow) var(--ease-out);
+}
+
+.splash-screen.is-exiting {
+  opacity: 0;
+  transform: scale(1.02);
+  visibility: hidden;
+}
+
+.splash-content h1 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-2);
+}
+
+.splash-content p {
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+}
+
+.splash-logo {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--accent), #0ea5e9);
+  color: var(--bg);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  margin: 0 auto var(--space-5);
+  box-shadow: var(--shadow-glow);
+}
+
+.splash-logo.is-animating {
+  animation: splashPulse 2.4s var(--ease-out) infinite;
+}
+
+.app-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  background: var(--bg-elevated);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  transition: background-color var(--transition);
+}
+
+.app-header {
+  height: 56px;
+  padding: 0 var(--padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.app-title {
+  font-weight: 700;
+  font-size: var(--font-lg);
+  color: var(--accent);
+  letter-spacing: var(--tracking-tight);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition), background var(--transition);
+}
+
+.header-icon-btn:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.app-main {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  padding: var(--padding);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  display: none;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--transition), transform var(--transition);
+  padding-bottom: 88px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-divider {
+  position: relative;
+}
+
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.5;
+  border-radius: var(--radius-full);
+}
+
+/* Standalone pages */
+body.app-page .screen.page-screen {
+  display: block;
+  position: relative;
+  inset: auto;
+  opacity: 1;
+  transform: none;
+  min-height: 100%;
+}
+
+body.app-page .app-main--page {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body.app-page .app-main--page .screen {
+  padding-bottom: var(--space-8);
+}

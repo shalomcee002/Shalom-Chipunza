@@ -1,0 +1,85 @@
+/* =========================================
+   23. PRINT STYLES
+   ========================================= */
+
+@media print {
+  body {
+    overflow: visible;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .skip-link,
+  .cursor-glow,
+  .splash-screen,
+  .desktop-site-header,
+  .app-header,
+  .bottom-nav,
+  .hero-backdrop,
+  .hero-orb,
+  .theme-toggle,
+  .toast,
+  .header-icon-btn,
+  .hp-field {
+    display: none !important;
+  }
+
+  .app-wrapper,
+  .app-container,
+  .app-main,
+  .screen {
+    position: static !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 0 !important;
+  }
+
+  .screen {
+    page-break-inside: avoid;
+    margin-bottom: 2rem;
+  }
+
+  .card,
+  .project-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.75rem;
+    color: #555;
+  }
+
+  a[href^="#"]::after,
+  .btn::after {
+    content: none;
+  }
+
+  h1, h2, h3, h4, p {
+    color: #000 !important;
+    max-width: 100% !important;
+  }
+
+  .accent {
+    -webkit-text-fill-color: #0369a1 !important;
+    color: #0369a1 !important;
+  }
+
+  .profile-img {
+    max-width: 120px;
+    animation: none !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

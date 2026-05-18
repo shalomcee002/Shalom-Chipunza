@@ -1,0 +1,30 @@
+/* =========================================
+   16. TOAST
+   React-ready: <Toast type="success|error" />
+   ========================================= */
+
+.toast {
+  position: fixed;
+  top: var(--space-5);
+  left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius);
+  color: #fff;
+  font-weight: 600;
+  font-size: var(--font-sm);
+  z-index: var(--z-toast);
+  transition: transform var(--transition-spring);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-lg);
+  max-width: min(90vw, 400px);
+}
+
+.toast.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-success { background: var(--success); }
+.toast-error { background: var(--error); }

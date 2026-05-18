@@ -1,0 +1,100 @@
+/* =========================================
+   09. BUTTONS
+   ========================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: var(--font-sm);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  min-height: 44px;
+  gap: var(--space-2);
+  transition: transform var(--duration-fast) var(--ease-out),
+              background var(--transition),
+              color var(--transition),
+              box-shadow var(--transition),
+              border-color var(--transition),
+              opacity var(--transition);
+}
+
+.btn:disabled,
+.btn.is-loading {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #0ea5e9);
+  color: var(--bg);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.btn-secondary {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-strong);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: var(--font-xs);
+  min-height: 36px;
+}
+
+.btn-cv {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--border-strong);
+}
+
+@media (hover: hover) {
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .btn-ghost:hover:not(:disabled),
+  .btn-outline:hover:not(:disabled) {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .btn-cv:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+  }
+}
+
+.btn-overlay {
+  transform: translateY(8px);
+  transition: transform var(--transition), opacity var(--transition);
+}

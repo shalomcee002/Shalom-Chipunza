@@ -1,0 +1,40 @@
+/* =========================================
+   PORTFOLIO DESIGN SYSTEM — Entry Point
+   Shalom Chipunza · Production CSS Architecture
+   ========================================= */
+
+@layer reset, base, components, utilities, overrides;
+
+/* Base */
+@import url('base/reset.css') layer(reset);
+@import url('base/variables.css') layer(base);
+@import url('base/typography.css') layer(base);
+@import url('base/animations.css') layer(base);
+@import url('base/accessibility.css') layer(base);
+
+/* Layout */
+@import url('layout/grids.css') layer(base);
+@import url('layout/app-shell.css') layer(components);
+@import url('layout/navigation.css') layer(components);
+
+/* Components */
+@import url('components/buttons.css') layer(components);
+@import url('components/cards.css') layer(components);
+@import url('components/forms.css') layer(components);
+@import url('components/hero.css') layer(components);
+@import url('components/projects.css') layer(components);
+@import url('components/skills.css') layer(components);
+@import url('components/social.css') layer(components);
+@import url('components/toast.css') layer(components);
+@import url('components/skeleton.css') layer(components);
+@import url('components/theme-toggle.css') layer(components);
+@import url('components/utilities.css') layer(utilities);
+
+/* Pages */
+@import url('pages/home.css') layer(components);
+@import url('pages/projects-page.css') layer(components);
+@import url('pages/skills-page.css') layer(components);
+
+/* Overrides & print */
+@import url('layout/responsive.css') layer(overrides);
+@import url('pages/print.css') layer(overrides);
