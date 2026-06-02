@@ -1,34 +1,16 @@
 /**
- * Portfolio — core interactions
- * Modules: Theme, Navigation, Forms, Animations, Toast
+ * Portfolio — core interactions (plain script, no modules)
  */
-document.addEventListener('DOMContentLoaded', () => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const currentPage = document.body.dataset.page || 'home';
-  const isSpa = currentPage === 'home' && document.querySelectorAll('.screen').length > 1;
+(function () {
+  'use strict';
 
-  const splash = document.getElementById('splash');
-  const screens = document.querySelectorAll('.screen');
-  const contactForm = document.getElementById('contact-form');
-  const typingEl = document.getElementById('typing-text');
-  const cursorGlow = document.getElementById('cursor-glow');
-
+  const THEME_KEY = 'portfolio-theme';
   const ROLES = [
     'AI Engineer',
     'Full Stack Developer',
     'IoT Innovator',
     'Security-aware Architect'
   ];
-
-  let currentScreen = '';
-  let typingIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-  let typingTimer = null;
-  const STAGGER_MS = prefersReducedMotion ? 0 : 80;
-
-  /* ========== Theme ========== */
-  const THEME_KEY = 'portfolio-theme';
 
   function getSystemTheme() {
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -40,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(THEME_KEY, resolved);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = resolved === 'light' ? '#f1f5f9' : '#0b1220';
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
+    document.querySelectorAll('.theme-toggle').forEach(function (btn) {
       btn.setAttribute('aria-label', resolved === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
     });
   }
@@ -48,20 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function initTheme() {
     const stored = localStorage.getItem(THEME_KEY);
     applyTheme(stored || 'dark');
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
-      btn.addEventListener('click', () => {
+    document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
         const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         applyTheme(next);
       });
     });
   }
 
-  initTheme();
-
-  /* ========== Navigation ========== */
-  function setActivePageNav(page) {
-    document.querySelectorAll('[data-nav-page]').forEach(el => {
-      const active = el.getAttribute('data-nav-page') === page;
+  function initNavigation() {
+    const currentPage = document.body.dataset.page || 'home';
+    document.querySelectorAll('[data-nav-page]').forEach(function (el) {
+      const active = el.getAttribute('data-nav-page') === currentPage;
       el.classList.toggle('active', active);
       if (el.classList.contains('nav-item') || el.classList.contains('desktop-nav-link')) {
         el.toggleAttribute('aria-current', active ? 'page' : false);
@@ -69,197 +49,193 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  setActivePageNav(currentPage);
+  function showToast(message, type) {
+    type = type || 'success';
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = '<i class="fa-solid ' + (type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle') + '" aria-hidden="true"></i><span>' + message + '</span>';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function () { toast.classList.add('visible'); });
+    setTimeout(function () {
+      toast.classList.remove('visible');
+      setTimeout(function () { toast.remove(); }, 400);
+    }, 3200);
+  }
 
-  function setActiveScreenNav(screenId) {
-    document.querySelectorAll('.bottom-nav .nav-item, .desktop-nav-link').forEach(item => {
-      const page = item.getAttribute('data-nav-page');
-      const active = page === screenId;
-      item.classList.toggle('active', active);
-      item.toggleAttribute('aria-current', active ? 'page' : false);
+  function initSplash(prefersReducedMotion, onComplete) {
+    const splash = document.getElementById('splash');
+    if (!splash) {
+      if (onComplete) onComplete();
+      return;
+    }
+
+    const splashLogo = splash.querySelector('.splash-logo');
+    if (splashLogo && !prefersReducedMotion) splashLogo.classList.add('is-animating');
+
+    function hideSplash() {
+      splash.classList.add('is-exiting');
+      splash.setAttribute('aria-hidden', 'true');
+      setTimeout(function () {
+        splash.style.display = 'none';
+        if (onComplete) onComplete();
+      }, prefersReducedMotion ? 0 : 520);
+    }
+
+    window.addEventListener('load', function () {
+      setTimeout(hideSplash, prefersReducedMotion ? 400 : 1400);
     });
   }
 
-  function navigateTo(screenId, options = {}) {
-    if (!isSpa || !screenId) return;
-    if (screenId === currentScreen && !options.force) return;
-    const target = document.getElementById(screenId);
-    if (!target) return;
+  function initTyping(prefersReducedMotion) {
+    const typingEl = document.getElementById('typing-text');
+    if (!typingEl) return { pause: function () {}, resume: function () {} };
 
-    resetAnimations(currentScreen);
-    currentScreen = screenId;
-    screens.forEach(s => s.classList.toggle('active', s.id === screenId));
-    setActiveScreenNav(screenId);
-    setActivePageNav(screenId);
-    if (!options.silent && 'vibrate' in navigator) navigator.vibrate(8);
-    triggerAnimations(screenId);
-    if (history.replaceState) {
-      const base = window.location.pathname.split('/').pop() || 'index.html';
-      history.replaceState(null, '', screenId === 'home' ? base : `${base}#${screenId}`);
-    }
-  }
+    let typingIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingTimer = null;
 
-  /* ========== Splash ========== */
-  function hideSplash() {
-    if (!splash) return;
-    splash.classList.add('is-exiting');
-    splash.setAttribute('aria-hidden', 'true');
-    setTimeout(() => {
-      splash.style.display = 'none';
-      if (isSpa) navigateTo('home', { force: true, silent: true });
-      else triggerPageAnimations();
-    }, prefersReducedMotion ? 0 : 520);
-  }
-
-  if (splash) {
-    const splashLogo = splash.querySelector('.splash-logo');
-    if (splashLogo && !prefersReducedMotion) splashLogo.classList.add('is-animating');
-    window.addEventListener('load', () => setTimeout(hideSplash, prefersReducedMotion ? 400 : 1400));
-  } else {
-    triggerPageAnimations();
-  }
-
-  /* ========== Typing ========== */
-  function tickTyping() {
-    if (!typingEl || prefersReducedMotion) {
-      if (typingEl) typingEl.textContent = ROLES[0];
-      return;
-    }
-    const current = ROLES[typingIndex];
-    const speed = isDeleting ? 45 : 85;
-    if (!isDeleting) {
-      typingEl.textContent = current.slice(0, charIndex + 1);
-      charIndex++;
-      if (charIndex === current.length) {
-        typingTimer = setTimeout(() => { isDeleting = true; tickTyping(); }, 2200);
-        return;
+    function tickTyping() {
+      if (prefersReducedMotion) return;
+      const current = ROLES[typingIndex];
+      const speed = isDeleting ? 45 : 85;
+      if (!isDeleting) {
+        typingEl.textContent = current.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === current.length) {
+          typingTimer = setTimeout(function () { isDeleting = true; tickTyping(); }, 2200);
+          return;
+        }
+      } else {
+        typingEl.textContent = current.slice(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          isDeleting = false;
+          typingIndex = (typingIndex + 1) % ROLES.length;
+        }
       }
-    } else {
-      typingEl.textContent = current.slice(0, charIndex - 1);
-      charIndex--;
-      if (charIndex === 0) {
-        isDeleting = false;
-        typingIndex = (typingIndex + 1) % ROLES.length;
-      }
+      typingTimer = setTimeout(tickTyping, speed);
     }
-    typingTimer = setTimeout(tickTyping, speed);
-  }
 
-  if (typingEl) {
     if (prefersReducedMotion) {
       typingEl.textContent = ROLES.join(' · ');
       const cursor = document.querySelector('.typing-cursor');
       if (cursor) cursor.hidden = true;
-    } else {
-      tickTyping();
+      return { pause: function () {}, resume: function () {} };
     }
+
+    tickTyping();
+    return {
+      pause: function () { if (typingTimer) clearTimeout(typingTimer); },
+      resume: function () { if (!prefersReducedMotion) tickTyping(); }
+    };
   }
 
-  if (isSpa) {
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const id = link.getAttribute('href').slice(1);
-        if (!id || !document.getElementById(id)) return;
-        e.preventDefault();
-        navigateTo(id);
+  function createAnimationsController(prefersReducedMotion) {
+    const STAGGER_MS = prefersReducedMotion ? 0 : 80;
+
+    function triggerAnimations(screenId) {
+      const screen = document.getElementById(screenId);
+      if (!screen) return;
+      screen.querySelectorAll('.animate-in:not(.visible)').forEach(function (el, index) {
+        setTimeout(function () { el.classList.add('visible'); }, index * STAGGER_MS);
       });
-    });
-    const hash = window.location.hash.slice(1);
-    if (hash && document.getElementById(hash)) navigateTo(hash, { force: true, silent: true });
-    window.addEventListener('hashchange', () => {
-      const id = window.location.hash.slice(1);
-      if (id && document.getElementById(id)) navigateTo(id, { force: true, silent: true });
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.target.closest('input, textarea, select')) return;
-      const idx = Number(e.key);
-      if (idx === 1) navigateTo('home');
-      if (idx === 2) window.location.href = 'projects.html';
-      if (idx === 3) window.location.href = 'skills.html';
-      if (idx === 4) navigateTo('about');
-      if (idx === 5) navigateTo('contact');
-    });
+      screen.querySelectorAll('.progress').forEach(function (bar, i) {
+        const width = bar.getAttribute('data-width');
+        if (!width) return;
+        bar.style.width = '0';
+        setTimeout(function () { bar.style.width = width; }, prefersReducedMotion ? 0 : 250 + i * 100);
+      });
+    }
+
+    function triggerPageAnimations() {
+      const pageScreen = document.querySelector('.page-screen.active, .screen.active');
+      if (pageScreen) triggerAnimations(pageScreen.id);
+    }
+
+    function initRevealObserver() {
+      if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+        document.querySelectorAll('.animate-in').forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+
+      const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.animate-in').forEach(function (el) { revealObserver.observe(el); });
+    }
+
+    function initAnimationPause() {
+      if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
+
+      const animSelectors = '.splash-logo.is-animating, .profile-img.is-animating, .profile-ring.is-animating, .hero-orb.is-animating';
+      const pauseObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
+        });
+      }, { threshold: 0 });
+
+      document.querySelectorAll(animSelectors).forEach(function (el) { pauseObserver.observe(el); });
+    }
+
+    function initDecorAnimations() {
+      if (prefersReducedMotion) return;
+      const splashLogo = document.querySelector('.splash-logo');
+      const profileImg = document.querySelector('.profile-img');
+      const profileRing = document.querySelector('.profile-ring');
+      const heroOrb = document.querySelector('.hero-orb--2');
+      if (splashLogo) splashLogo.classList.add('is-animating');
+      if (profileImg) profileImg.classList.add('is-animating');
+      if (profileRing) profileRing.classList.add('is-animating');
+      if (heroOrb) heroOrb.classList.add('is-animating');
+    }
+
+    return {
+      triggerPageAnimations: triggerPageAnimations,
+      initRevealObserver: initRevealObserver,
+      initAnimationPause: initAnimationPause,
+      initDecorAnimations: initDecorAnimations
+    };
   }
 
-  /* ========== Animations (IntersectionObserver) ========== */
-  function triggerAnimations(screenId) {
-    const screen = document.getElementById(screenId);
-    if (!screen) return;
-    screen.querySelectorAll('.animate-in:not(.visible)').forEach((el, index) => {
-      setTimeout(() => el.classList.add('visible'), index * STAGGER_MS);
-    });
-    screen.querySelectorAll('.progress').forEach((bar, i) => {
-      const width = bar.getAttribute('data-width');
-      if (!width) return;
-      bar.style.width = '0';
-      setTimeout(() => { bar.style.width = width; }, prefersReducedMotion ? 0 : 250 + i * 100);
-    });
-  }
-
-  function triggerPageAnimations() {
-    const pageScreen = document.querySelector('.page-screen.active, .screen.active');
-    if (pageScreen) triggerAnimations(pageScreen.id);
-  }
-
-  function resetAnimations(screenId) {
-    const screen = document.getElementById(screenId);
-    if (!screen) return;
-    screen.querySelectorAll('.animate-in').forEach(el => el.classList.remove('visible'));
-    screen.querySelectorAll('.progress').forEach(bar => { bar.style.width = '0'; });
-  }
-
-  function initRevealObserver() {
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-      document.querySelectorAll('.animate-in').forEach(el => el.classList.add('visible'));
+  function initCursorGlow(prefersReducedMotion) {
+    const cursorGlow = document.getElementById('cursor-glow');
+    if (!cursorGlow || prefersReducedMotion || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       return;
     }
 
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const el = entry.target;
-        if (entry.isIntersecting) {
-          el.classList.add('visible');
-          revealObserver.unobserve(el);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.animate-in').forEach(el => revealObserver.observe(el));
+    let glowActive = false;
+    document.addEventListener('mousemove', function (e) {
+      cursorGlow.style.left = e.clientX + 'px';
+      cursorGlow.style.top = e.clientY + 'px';
+      if (!glowActive) {
+        cursorGlow.classList.add('is-active');
+        glowActive = true;
+      }
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () {
+      cursorGlow.classList.remove('is-active');
+      glowActive = false;
+    });
   }
 
-  function initAnimationPause() {
-    if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
+  function initProfileImage() {
+    const profileImg = document.querySelector('.profile-img');
+    const profileSkeleton = document.getElementById('profile-skeleton');
+    if (!profileImg) return;
 
-    const animSelectors = '.splash-logo.is-animating, .profile-img.is-animating, .profile-ring.is-animating, .hero-orb.is-animating';
-    const pauseObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
-      });
-    }, { threshold: 0 });
-
-    document.querySelectorAll(animSelectors).forEach(el => pauseObserver.observe(el));
-  }
-
-  function initDecorAnimations() {
-    if (prefersReducedMotion) return;
-    document.querySelector('.splash-logo')?.classList.add('is-animating');
-    document.querySelector('.profile-img')?.classList.add('is-animating');
-    document.querySelector('.profile-ring')?.classList.add('is-animating');
-    document.querySelector('.hero-orb--2')?.classList.add('is-animating');
-  }
-
-  initRevealObserver();
-  initAnimationPause();
-  initDecorAnimations();
-
-  /* ========== Profile image load ========== */
-  const profileImg = document.querySelector('.profile-img');
-  const profileSkeleton = document.getElementById('profile-skeleton');
-  if (profileImg) {
-    const onProfileReady = () => {
+    function onProfileReady() {
       profileImg.classList.add('is-loaded');
       if (profileSkeleton) profileSkeleton.classList.add('hidden');
-    };
+    }
+
     if (profileImg.complete) onProfileReady();
     else {
       profileImg.addEventListener('load', onProfileReady);
@@ -267,61 +243,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ========== Cursor glow ========== */
-  if (cursorGlow && !prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    let glowActive = false;
-    document.addEventListener('mousemove', (e) => {
-      cursorGlow.style.left = `${e.clientX}px`;
-      cursorGlow.style.top = `${e.clientY}px`;
-      if (!glowActive) {
-        cursorGlow.classList.add('is-active');
-        glowActive = true;
-      }
-    }, { passive: true });
-    document.addEventListener('mouseleave', () => {
-      cursorGlow.classList.remove('is-active');
-      glowActive = false;
-    });
-  }
-
-  /* ========== Toast ========== */
-  function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.setAttribute('role', 'alert');
-    toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" aria-hidden="true"></i><span>${message}</span>`;
-    document.body.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.add('visible'));
-    setTimeout(() => {
-      toast.classList.remove('visible');
-      setTimeout(() => toast.remove(), 400);
-    }, 3200);
-  }
-
-  /* ========== Forms (filled / focused — no :has()) ========== */
   function initFormStates() {
-    document.querySelectorAll('.floating-group').forEach(group => {
+    document.querySelectorAll('.floating-group').forEach(function (group) {
       const field = group.querySelector('input, textarea, select');
       if (!field) return;
 
-      const updateFilled = () => {
+      function updateFilled() {
         let filled = false;
         if (field.tagName === 'SELECT') filled = field.value !== '';
         else filled = field.value.trim() !== '';
         group.classList.toggle('filled', filled);
-      };
+      }
 
-      field.addEventListener('focus', () => group.classList.add('focused'));
-      field.addEventListener('blur', () => group.classList.remove('focused'));
+      field.addEventListener('focus', function () { group.classList.add('focused'); });
+      field.addEventListener('blur', function () { group.classList.remove('focused'); });
       field.addEventListener('input', updateFilled);
       field.addEventListener('change', updateFilled);
       updateFilled();
     });
   }
 
-  initFormStates();
+  function initContactForm() {
+    initFormStates();
 
-  if (contactForm) {
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) return;
+
+    const endpoint = contactForm.dataset.contactEndpoint || '/api/contact';
+    const useJsonApi = endpoint.indexOf('/api/') !== -1;
     const inputs = contactForm.querySelectorAll('input:not(.hp-field), textarea, select');
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const messageField = contactForm.querySelector('#message');
@@ -329,12 +278,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (messageField && charCounter) {
       const minLen = parseInt(messageField.getAttribute('minlength'), 10) || 10;
-      const updateCounter = () => {
+      function updateCounter() {
         const len = messageField.value.length;
-        charCounter.textContent = `${len} / ${minLen}+ characters`;
+        charCounter.textContent = len + ' / ' + minLen + '+ characters';
         charCounter.classList.toggle('is-valid', len >= minLen);
         charCounter.classList.toggle('is-invalid', len > 0 && len < minLen);
-      };
+      }
       messageField.addEventListener('input', updateCounter);
       updateCounter();
     }
@@ -354,17 +303,25 @@ document.addEventListener('DOMContentLoaded', () => {
       return isValid;
     }
 
-    inputs.forEach(input => {
-      input.addEventListener('input', () => validateInput(input));
-      input.addEventListener('blur', () => validateInput(input));
+    inputs.forEach(function (input) {
+      input.addEventListener('input', function () { validateInput(input); });
+      input.addEventListener('blur', function () { validateInput(input); });
     });
 
-    contactForm.addEventListener('submit', async (e) => {
+    contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (contactForm.querySelector('.hp-field')?.value) return;
+      const honeypot = contactForm.querySelector('.hp-field, [name="website"]');
+      if (honeypot && honeypot.value) return;
+
+      if (window.location.protocol === 'file:') {
+        showToast('Contact form needs a server. Run: vercel dev  or  php -S localhost:8000', 'error');
+        return;
+      }
 
       let isFormValid = true;
-      inputs.forEach(input => { if (!validateInput(input)) isFormValid = false; });
+      inputs.forEach(function (input) {
+        if (!validateInput(input)) isFormValid = false;
+      });
 
       if (!isFormValid) {
         showToast('Please correct the errors in the form.', 'error');
@@ -380,37 +337,97 @@ document.addEventListener('DOMContentLoaded', () => {
       btnText.textContent = 'Sending…';
       spinner.hidden = false;
 
-      try {
-        const response = await fetch('contact.php', { method: 'POST', body: new FormData(contactForm) });
-        const result = await response.json();
-        if (result.success) {
-          showToast(result.message, 'success');
-          contactForm.reset();
-          contactForm.querySelectorAll('.floating-group').forEach(g => {
-            g.classList.remove('filled', 'success', 'error', 'focused');
-          });
-          if (charCounter) charCounter.textContent = '0 / 10+ characters';
-          if ('vibrate' in navigator) navigator.vibrate([40, 20, 40]);
-        } else {
-          showToast(result.message || 'Failed to send message.', 'error');
-        }
-      } catch {
-        showToast('A connection error occurred. Please try again.', 'error');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('is-loading');
-        btnText.textContent = originalText;
-        spinner.hidden = true;
+      let fetchBody;
+      let fetchHeaders = { Accept: 'application/json' };
+
+      if (useJsonApi) {
+        const fd = new FormData(contactForm);
+        fetchBody = JSON.stringify({
+          name: fd.get('name'),
+          email: fd.get('email'),
+          phone: fd.get('phone'),
+          subject: fd.get('subject'),
+          message: fd.get('message'),
+          website: fd.get('website') || ''
+        });
+        fetchHeaders['Content-Type'] = 'application/json';
+      } else {
+        fetchBody = new FormData(contactForm);
       }
+
+      fetch(endpoint, {
+        method: 'POST',
+        body: fetchBody,
+        headers: fetchHeaders
+      })
+        .then(function (response) {
+          return response.json().then(function (result) {
+            return { response: response, result: result };
+          }).catch(function () {
+            return { response: response, result: { success: false, message: 'Invalid server response.' } };
+          });
+        })
+        .then(function (_ref) {
+          const response = _ref.response;
+          const result = _ref.result;
+          if (response.ok && result.success) {
+            showToast(result.message || 'Message sent successfully!', 'success');
+            contactForm.reset();
+            contactForm.querySelectorAll('.floating-group').forEach(function (g) {
+              g.classList.remove('filled', 'success', 'error', 'focused');
+            });
+            if (charCounter) charCounter.textContent = '0 / 10+ characters';
+            if ('vibrate' in navigator) navigator.vibrate([40, 20, 40]);
+          } else {
+            showToast(result.message || result.error || 'Failed to send message.', 'error');
+          }
+        })
+        .catch(function () {
+          showToast('A connection error occurred. Please try again.', 'error');
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('is-loading');
+          btnText.textContent = originalText;
+          spinner.hidden = true;
+        });
     });
   }
 
-  document.body.addEventListener('touchmove', (e) => {
-    if (!e.target.closest('.screen, .app-main--page')) e.preventDefault();
-  }, { passive: false });
+  document.addEventListener('DOMContentLoaded', function () {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden && typingTimer) clearTimeout(typingTimer);
-    else if (!document.hidden && typingEl && !prefersReducedMotion) tickTyping();
+    initTheme();
+    initNavigation();
+
+    const animations = createAnimationsController(prefersReducedMotion);
+    animations.initRevealObserver();
+    animations.initAnimationPause();
+    animations.initDecorAnimations();
+
+    initCursorGlow(prefersReducedMotion);
+    initProfileImage();
+    initContactForm();
+
+    const typing = initTyping(prefersReducedMotion);
+
+    function onReady() {
+      animations.triggerPageAnimations();
+    }
+
+    if (document.getElementById('splash')) {
+      initSplash(prefersReducedMotion, onReady);
+    } else {
+      onReady();
+    }
+
+    document.body.addEventListener('touchmove', function (e) {
+      if (!e.target.closest('.screen, .app-main--page')) e.preventDefault();
+    }, { passive: false });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) typing.pause();
+      else typing.resume();
+    });
   });
-});
+})();

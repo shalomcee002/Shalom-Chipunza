@@ -1,0 +1,62 @@
+          <div class="screen-header">
+            <h2>Contact</h2>
+            <p>Hiring, collaborations, or a technical challenge—send a concise note and I will respond promptly.</p>
+          </div>
+          <div class="contact-container">
+            <form id="contact-form" class="card animate-in" novalidate data-contact-endpoint="/api/contact">
+              <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+              <div class="form-group floating-group has-icon">
+                <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+                <input type="text" id="name" name="name" placeholder=" " required minlength="3" autocomplete="name">
+                <label for="name">Full Name</label>
+                <span class="error-message">Name must be at least 3 characters.</span>
+              </div>
+
+              <div class="form-group floating-group has-icon">
+                <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+                <input type="email" id="email" name="email" placeholder=" " required autocomplete="email">
+                <label for="email">Email Address</label>
+                <span class="error-message">Please enter a valid email address.</span>
+              </div>
+
+              <div class="form-group floating-group has-icon">
+                <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-phone"></i></span>
+                <input type="tel" id="phone" name="phone" placeholder=" " required autocomplete="tel">
+                <label for="phone">Phone Number</label>
+                <span class="error-message">Please enter a valid phone number.</span>
+              </div>
+
+              <div class="form-group floating-group has-icon">
+                <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-tag"></i></span>
+                <select id="subject" name="subject" required>
+                  <option value="" disabled selected hidden></option>
+                  <option value="Collaboration">Project collaboration</option>
+                  <option value="Hiring">Role / hiring</option>
+                  <option value="AI Query">AI / ML inquiry</option>
+                  <option value="Other">Other</option>
+                </select>
+                <label for="subject">Subject</label>
+                <span class="error-message">Please select a subject.</span>
+              </div>
+
+              <div class="form-group floating-group has-icon has-icon--textarea">
+                <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-message"></i></span>
+                <textarea id="message" name="message" rows="4" placeholder=" " required minlength="10" aria-describedby="message-counter"></textarea>
+                <label for="message">Message</label>
+                <span class="char-counter" id="message-counter" aria-live="polite">0 / 10+ characters</span>
+                <span class="error-message">Message must be at least 10 characters.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">
+                <span class="btn-text">Send message</span>
+                <span class="spinner" hidden aria-hidden="true"></span>
+              </button>
+            </form>
+
+            <div class="social-links animate-in" aria-label="Social and messaging">
+              <a href="https://linkedin.com/in/shalom-chipunza-ai-iot-ml" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+              <a href="https://github.com/shalomcee002" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+              <a href="https://wa.me/0778119682" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+            </div>
+          </div>

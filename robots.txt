@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /php/
+Disallow: /contact-handler.php
+
+Sitemap: https://shalomchipunza.vercel.app/sitemap.xml

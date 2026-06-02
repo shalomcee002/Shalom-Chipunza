@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Shalom Chipunza — hiring, collaborations, and technical inquiries.">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="color-scheme" content="dark">
+  <title>Contact | Shalom Chipunza</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body class="app-page" data-page="contact">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
+  <header class="desktop-site-header" aria-label="Primary">
+    <div class="desktop-site-header__inner">
+      <a href="index.html" class="desktop-brand" data-nav-page="home">
+        <span class="desktop-brand__mark" aria-hidden="true">SC</span>
+        <span class="desktop-brand__text">
+          <span class="desktop-brand__name">Shalom Chipunza</span>
+          <span class="desktop-brand__role">AI Engineer · AI Enthusiast · IoT · Machine Learning</span>
+        </span>
+      </a>
+      <nav class="desktop-site-nav" aria-label="Section navigation">
+        <ul class="desktop-site-nav__list">
+          <li><a href="index.html" class="desktop-nav-link" data-nav-page="home">Home</a></li>
+          <li><a href="projects.html" class="desktop-nav-link" data-nav-page="projects">Work</a></li>
+          <li><a href="skills.html" class="desktop-nav-link" data-nav-page="skills">Skills</a></li>
+          <li><a href="about.html" class="desktop-nav-link" data-nav-page="about">About</a></li>
+          <li><a href="contact.html" class="desktop-nav-link" data-nav-page="contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="desktop-site-header__actions">
+        <button type="button" class="theme-toggle" aria-label="Switch to light theme">
+          <i class="fa-solid fa-sun icon-sun" aria-hidden="true"></i>
+          <i class="fa-solid fa-moon icon-moon" aria-hidden="true"></i>
+        </button>
+        <a class="btn btn-sm btn-cv" href="resources/ShalomChipunza_CV.pdf" download="ShalomChipunza_CV.pdf">
+          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+          <span>CV</span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <div class="app-wrapper" id="app-wrapper">
+    <div class="app-container">
+      <header class="app-header">
+        <span class="app-title">Contact</span>
+        <div class="header-actions">
+                  <button type="button" class="theme-toggle" aria-label="Switch to light theme">
+          <i class="fa-solid fa-sun icon-sun" aria-hidden="true"></i>
+          <i class="fa-solid fa-moon icon-moon" aria-hidden="true"></i>
+        </button>
+        </div>
+      </header>
+
+      <main class="app-main app-main--page" id="main-content">
+        <section class="screen page-screen active" id="contact" aria-label="Contact">
+        <div class="screen-header">
+          <h2>Contact</h2>
+          <p>Hiring, collaborations, or a technical challenge—send a concise note and I will respond promptly.</p>
+        </div>
+        <div class="contact-container">
+          <form id="contact-form" class="card animate-in" novalidate data-contact-endpoint="/api/contact">
+            <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <div class="form-group floating-group has-icon">
+              <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+              <input type="text" id="name" name="name" placeholder=" " required minlength="3" autocomplete="name">
+              <label for="name">Full Name</label>
+              <span class="error-message">Name must be at least 3 characters.</span>
+            </div>
+
+            <div class="form-group floating-group has-icon">
+              <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+              <input type="email" id="email" name="email" placeholder=" " required autocomplete="email">
+              <label for="email">Email Address</label>
+              <span class="error-message">Please enter a valid email address.</span>
+            </div>
+
+            <div class="form-group floating-group has-icon">
+              <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-phone"></i></span>
+              <input type="tel" id="phone" name="phone" placeholder=" " required autocomplete="tel">
+              <label for="phone">Phone Number</label>
+              <span class="error-message">Please enter a valid phone number.</span>
+            </div>
+
+            <div class="form-group floating-group has-icon">
+              <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-tag"></i></span>
+              <select id="subject" name="subject" required>
+                <option value="" disabled selected hidden></option>
+                <option value="Collaboration">Project collaboration</option>
+                <option value="Hiring">Role / hiring</option>
+                <option value="AI Query">AI / ML inquiry</option>
+                <option value="Other">Other</option>
+              </select>
+              <label for="subject">Subject</label>
+              <span class="error-message">Please select a subject.</span>
+            </div>
+
+            <div class="form-group floating-group has-icon has-icon--textarea">
+              <span class="field-icon" aria-hidden="true"><i class="fa-solid fa-message"></i></span>
+              <textarea id="message" name="message" rows="4" placeholder=" " required minlength="10" aria-describedby="message-counter"></textarea>
+              <label for="message">Message</label>
+              <span class="char-counter" id="message-counter" aria-live="polite">0 / 10+ characters</span>
+              <span class="error-message">Message must be at least 10 characters.</span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              <span class="btn-text">Send message</span>
+              <span class="spinner" hidden aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <div class="social-links animate-in" aria-label="Social and messaging">
+            <a href="https://linkedin.com/in/shalom-chipunza-ai-iot-ml" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+            <a href="https://github.com/shalomcee002" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a href="https://wa.me/0778119682" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+          </div>
+        </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="App sections">
+        <a href="index.html" class="nav-item" data-nav-page="home">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+        <a href="projects.html" class="nav-item" data-nav-page="projects">
+          <i class="fa-solid fa-diagram-project" aria-hidden="true"></i>
+          <span>Work</span>
+        </a>
+        <a href="skills.html" class="nav-item" data-nav-page="skills">
+          <i class="fa-solid fa-code" aria-hidden="true"></i>
+          <span>Skills</span>
+        </a>
+        <a href="about.html" class="nav-item" data-nav-page="about">
+          <i class="fa-solid fa-user" aria-hidden="true"></i>
+          <span>About</span>
+        </a>
+        <a href="contact.html" class="nav-item" data-nav-page="contact">
+          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          <span>Contact</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -68,6 +68,9 @@
 }
 
 :root {
+  /* Asset paths (keep in sync with HTML CV links) */
+  --cv-path: resources/ShalomChipunza_CV.pdf;
+
   /* Spacing */
   --space-1: 4px;
   --space-2: 8px;
